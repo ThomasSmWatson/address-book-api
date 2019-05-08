@@ -7,9 +7,29 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
-const contacts = []
+const contacts = [
+  {
+    id: "e769db64-f7bb-46f9-8355-deabb9190ab6",
+    name: "Thomas Watson",
+    email: "thomas.sm.watson@gmail.com",
+    phone: "+44 7707932252"
+  },
+  {
+    id: "614b6416-a90c-4d4b-ae20-ca8b431e67f9",
+    name: "Bill Burr",
+    email: "bill.burr@gmail.com",
+    phone: "+60 7389228282"
+  }
+]
 app.get("/contact", (req, res) => {
-  res.json({ contacts })
+  const nameQ = req.query.name
+  let mContacts
+  if (nameQ)
+    mContacts = contacts.filter(c =>
+      c.name.toLowerCase().includes(nameQ.toLowerCase())
+    )
+  else mContacts = contacts
+  res.json({ contacts: mContacts })
 })
 
 app.get("/contact/:id", (req, res) => {
