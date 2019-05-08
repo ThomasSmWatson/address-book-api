@@ -32,10 +32,12 @@ app.get("/contact", (req, res) => {
   res.json({ contacts: mContacts })
 })
 
-app.get("/contact/:id", (req, res) => {
+app.put("/contact/:id", (req, res) => {
   if (!id) return req.status(400).send("no Id has been provided")
-  contacts.find(c => c.id === req.params.id)
-  res.json({ contacts })
+  const contact = contacts.find(c => c.id === req.params.id)[0]
+  if (!contact)
+    return res.status(404).send(`no contact with id ${id} exists...`)
+  res.json({ contact })
 })
 
 app.post("/contact", (req, res) => {
