@@ -33,8 +33,14 @@ app.get("/contact", (req, res) => {
 })
 
 app.put("/contact/:id", (req, res) => {
-  if (!id) return req.status(400).send("no Id has been provided")
-  const contact = contacts.find(c => c.id === req.params.id)[0]
+  const id = req.params.id
+  const { name, email, phone } = req.body
+  if (!id) return res.status(400).send("no Id has been provided")
+  if (!name || !email || !phone)
+    res.status(400).send("You must provide a name, email and phone number")
+  const contact = contacts.find(c => c.id === id)
+  const contactIndex = contacts.findIndex(c => c.id === id)
+  contacts[contactIndex] = { id, name, email, phone }
   if (!contact)
     return res.status(404).send(`no contact with id ${id} exists...`)
   res.json({ contact })
